@@ -10,7 +10,6 @@ cefFieldMapping:
     created_at: rt
     actor_ip_address: src
     actor_username: duser
-    name: fname
 eventIdMap:
     account_created: 910
     account_deleted: 911
