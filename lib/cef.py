@@ -38,13 +38,21 @@ class Cef(object):
         for key, value in self.configs['cefFieldMapping'].items():
             if key in event:
                 if key == "created_at":
-                    event[key] = self.format_cef_date(event[key])
-                mapping[value] = event[key]
+                    cef_date = self.format_cef_date(event[key])
+                    mapping[value] = cef_date
+                else:
+                    mapping[value] = event[key]
                 del event[key]
         if event:
-            mapping["cs1label"] = "extras"
+            mapping["cs1Label"] = "extras"
             mapping["cs1"] = event
         return mapping
+
+    def escape_specials(self, cef_str):
+        formatted = cef_str.replace("\\","\\\\")
+        formatted = cef_str.replace("=","\\=")
+
+        return formatted
 
     def format_cef(self, batched):
         """format cef"""
@@ -54,6 +62,6 @@ class Cef(object):
             constants_map = self.cef_constants(event)
             schema = self.build_cef_mapping(event)
             for key, value in schema.items():
-                cef_str += "%s=%s " % (key, value)
+                cef_str += "%s=%s " % (key, self.escape_specials(str(value)))
             aggregated_cef.append("%s%s" % (constants_map, cef_str))
         return aggregated_cef
