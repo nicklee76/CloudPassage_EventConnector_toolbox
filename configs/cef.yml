@@ -4,12 +4,22 @@ cefProduct: CPHalo
 cefProductVersion: 1.0
 cefHaloGrid: 50.57.180.190
 cefFieldMapping:
-    server_ip_address: dst
-    server_hostname: dhost
+    id: eventId
+    type: outcome
+    name: reason
     message: msg
+    server_id: deviceExternalId
     created_at: rt
-    actor_ip_address: src
-    actor_username: duser
+    server_platform: cs1
+    server_hostname: shost
+    server_group_name: cs2
+    server_ip_address: src
+    server_reported_fqdn: sourceDnsDomain
+    server_label: cs3
+    server_primary_ip_address: sourceTranslatedAddress
+    policy_name: cs4
+    rule_name: cs5
+    original_log_entry: flexString2
 eventIdMap:
     account_created: 910
     account_deleted: 911

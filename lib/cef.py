@@ -43,9 +43,6 @@ class Cef(object):
                 else:
                     mapping[value] = event[key]
                 del event[key]
-        if event:
-            mapping["cs1Label"] = "extras"
-            mapping["cs1"] = event
         return mapping
 
     def escape_specials(self, cef_str):
