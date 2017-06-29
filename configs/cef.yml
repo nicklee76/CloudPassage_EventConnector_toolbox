@@ -4,6 +4,13 @@ cefProduct: CPHalo
 cefProductVersion: 1.0
 cefHaloGrid: 50.57.180.190
 cefFieldMapping:
+    server_ip_address: dst
+    server_hostname: dhost
+    message: msg
+    created_at: rt
+    actor_ip_address: src
+    actor_username: duser
+linuxLidsMapping:
     id: eventId
     type: outcome
     name: reason
@@ -20,6 +27,25 @@ cefFieldMapping:
     policy_name: cs4
     rule_name: cs5
     original_log_entry: flexString2
+windowsLidsMapping:
+    EventId: eventId
+    SystemTime: rt
+    Channel: cat
+    Computer: flexString1
+    SubjectUserName: suser
+    SubjectDomainName: deviceNtDomain
+    SubjectLogonId: duid
+    TargetUserName: duser
+    TargetDomainName: dntdom
+    FailureReason: reason
+    LogonType: cn1
+    LogonProcessName: destinationServiceName
+    AuthenticationPackageName: cs6
+    WorkstationName: shost
+    ProcessId: spid
+    ProcessName: sproc
+    IpAddress: src
+    IpPort: spt
 eventIdMap:
     account_created: 910
     account_deleted: 911
