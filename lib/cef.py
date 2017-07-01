@@ -30,11 +30,9 @@ class Cef(object):
         mapping['deviceDirection'] = 1 if 'actor_username' in event else 0
 
     def format_cef_date(self, date):
+        """format cef date"""
         date_time = datetime.datetime.strptime(date, '%Y-%m-%dT%H:%M:%S.%fZ')
         return date_time.strftime('%b %d %Y %H:%M:%S UTC')
-
-    def format_windows_lids(self, event):
-        log = event['original_log_entry']
 
     def build_cef_mapping(self, event):
         """build cef mapping"""
@@ -54,27 +52,42 @@ class Cef(object):
         return mapping
 
     def build_lids_mapping(self, event):
+        """build lids mapping"""
         mapping = {}
-        schema = self.select_lids_platform_mapping(event['server_platform'])
+        platform = event['server_platform']
+        if platform == 'Windows':
+            event = self.xml.to_hash(event['original_log_entry'])
+
+        schema = self.select_lids_platform_mapping(platform)
         for key, value in schema.items():
             if key in event:
                 mapping[value] = event[key]
         return mapping
 
     def select_lids_platform_mapping(self, platform):
+        """select lids platform mapping"""
         if platform == 'Linux':
             return self.configs['linuxLidsMapping']
         return self.configs['windowsLidsMapping']
 
     def event_is_lids(self, event):
+        """check if events is lids"""
         if event['type'] == 'lids_rule_failed':
             return True
 
     def escape_specials(self, cef_str):
+        """escape special characters"""
         formatted = cef_str.replace("\\","\\\\")
         formatted = cef_str.replace("=","\\=")
 
         return formatted
+
+    def build_custom_schema(self, event):
+        """build schema based on event type"""
+        if self.event_is_lids(event):
+            return self.build_lids_mapping(event)
+        else:
+            return self.build_cef_mapping(event)
 
     def format_cef(self, batched):
         """format cef"""
@@ -82,9 +95,8 @@ class Cef(object):
         for event in batched:
             cef_str = ""
             constants_map = self.cef_constants(event)
-            schema = self.build_cef_mapping(event)
-            if self.event_is_lids(event):
-                schema = self.build_lids_mapping(event)
+            schema = self.build_custom_schema(event)
+
             for key, value in schema.items():
                 cef_str += "%s=%s " % (key, self.escape_specials(str(value)))
             aggregated_cef.append("%s%s" % (constants_map, cef_str))

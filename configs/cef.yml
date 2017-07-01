@@ -28,8 +28,8 @@ linuxLidsMapping:
     rule_name: cs5
     original_log_entry: flexString2
 windowsLidsMapping:
-    EventId: eventId
-    SystemTime: rt
+    EventID: eventId
+    TimeCreated: rt
     Channel: cat
     Computer: flexString1
     SubjectUserName: suser
