@@ -21,13 +21,20 @@ class Cef(object):
                                               self.configs["cefVendor"],
                                               self.configs["cefProduct"],
                                               self.configs["cefProductVersion"],
-                                              self.configs["eventIdMap"][event["type"]],
+                                              self.build_event_id(event),
                                               event["name"],
                                               severity)
 
     def build_cef_outliers(self, mapping, event):
         """build cef outliers"""
         mapping['deviceDirection'] = 1 if 'actor_username' in event else 0
+
+    def build_event_id(self, event):
+        if self.event_is_lids(event) and event["server_platform"] == 'Windows':
+            xml = self.xml.to_hash(event['original_log_entry'])
+            if 'EventID' in xml:
+                return xml['EventID']
+        return self.configs["eventIdMap"][event["type"]]
 
     def format_cef_date(self, date):
         """format cef date"""
@@ -86,8 +93,7 @@ class Cef(object):
         """build schema based on event type"""
         if self.event_is_lids(event):
             return self.build_lids_mapping(event)
-        else:
-            return self.build_cef_mapping(event)
+        return self.build_cef_mapping(event)
 
     def format_cef(self, batched):
         """format cef"""
