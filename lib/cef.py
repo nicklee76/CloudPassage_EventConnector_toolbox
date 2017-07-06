@@ -5,6 +5,7 @@ from lib.options import Options
 from lib.xml_controller import Xml
 import lib.loadyaml as loadyaml
 import datetime
+import re
 
 
 class Cef(object):
@@ -28,6 +29,20 @@ class Cef(object):
     def build_cef_outliers(self, mapping, event):
         """build cef outliers"""
         mapping['deviceDirection'] = 1 if 'actor_username' in event else 0
+        server_label = self.parse_server_label(event)
+        if server_label:
+            mapping[self.configs['cefFieldMapping']['ec2_account_id']] = server_label['ec2_account_id']
+            mapping[self.configs['cefFieldMapping']['ec2_instance_id']] = server_label['ec2_instance_id']
+
+    def parse_server_label(self, event):
+        """parse server label for ec2 instance and account id"""
+        if "server_label" in event:
+            search = re.search('(^\d+)_(i.+)', str(event['server_label']))
+            if search:
+                return {
+                    'ec2_account_id': search.group(1),
+                    'ec2_instance_id': search.group(2)
+                }
 
     def build_event_id(self, event):
         if self.event_is_lids(event) and event["server_platform"] == 'Windows':
@@ -61,9 +76,10 @@ class Cef(object):
     def build_lids_mapping(self, event):
         """build lids mapping"""
         mapping = {}
+        self.build_cef_outliers(mapping, event)
         platform = event['server_platform']
         if platform == 'Windows':
-            event = self.xml.to_hash(event['original_log_entry'])
+            event.update(self.xml.to_hash(event['original_log_entry']))
 
         schema = self.select_lids_platform_mapping(platform)
         for key, value in schema.items():

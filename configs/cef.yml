@@ -10,6 +10,8 @@ cefFieldMapping:
     created_at: rt
     actor_ip_address: src
     actor_username: duser
+    ec2_account_id: cs3
+    ec2_instance_id: dvchost
 linuxLidsMapping:
     id: eventId
     type: outcome
@@ -22,7 +24,6 @@ linuxLidsMapping:
     server_group_name: cs2
     server_ip_address: src
     server_reported_fqdn: sourceDnsDomain
-    server_label: cs3
     server_primary_ip_address: sourceTranslatedAddress
     policy_name: cs4
     rule_name: cs5
@@ -45,6 +46,12 @@ windowsLidsMapping:
     ProcessName: sproc
     IpAddress: src
     IpPort: spt
+    message: msg
+    server_platform: cs1
+    server_group_name: cs2
+    policy_name: cs4
+    rule_name: cs5
+    original_log_entry: flexString2
 eventIdMap:
     account_created: 910
     account_deleted: 911
