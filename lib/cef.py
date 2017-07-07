@@ -3,9 +3,9 @@
 """Cef class"""
 from lib.options import Options
 from lib.xml_controller import Xml
+from lib.event_helper import EventHelper
 import lib.loadyaml as loadyaml
 import datetime
-import re
 
 
 class Cef(object):
@@ -14,6 +14,7 @@ class Cef(object):
         self.options = options or Options()
         self.configs = loadyaml.load_cef()
         self.xml = Xml()
+        self.ehelper = EventHelper()
 
     def cef_constants(self, event):
         """build cef constants"""
@@ -22,34 +23,17 @@ class Cef(object):
                                               self.configs["cefVendor"],
                                               self.configs["cefProduct"],
                                               self.configs["cefProductVersion"],
-                                              self.build_event_id(event),
+                                              self.ehelper.build_event_id(event),
                                               event["name"],
                                               severity)
 
     def build_cef_outliers(self, mapping, event):
         """build cef outliers"""
         mapping['deviceDirection'] = 1 if 'actor_username' in event else 0
-        server_label = self.parse_server_label(event)
+        server_label = self.ehelper.parse_server_label(event)
         if server_label:
             mapping[self.configs['cefFieldMapping']['ec2_account_id']] = server_label['ec2_account_id']
             mapping[self.configs['cefFieldMapping']['ec2_instance_id']] = server_label['ec2_instance_id']
-
-    def parse_server_label(self, event):
-        """parse server label for ec2 instance and account id"""
-        if "server_label" in event:
-            search = re.search('(^\d+)_(i.+)', str(event['server_label']))
-            if search:
-                return {
-                    'ec2_account_id': search.group(1),
-                    'ec2_instance_id': search.group(2)
-                }
-
-    def build_event_id(self, event):
-        if self.event_is_lids(event) and event["server_platform"] == 'Windows':
-            xml = self.xml.to_hash(event['original_log_entry'])
-            if 'EventID' in xml:
-                return xml['EventID']
-        return self.configs["eventIdMap"][event["type"]]
 
     def format_cef_date(self, date):
         """format cef date"""
@@ -77,26 +61,14 @@ class Cef(object):
         """build lids mapping"""
         mapping = {}
         self.build_cef_outliers(mapping, event)
-        platform = event['server_platform']
-        if platform == 'Windows':
+        if event['server_platform'] == 'Windows':
             event.update(self.xml.to_hash(event['original_log_entry']))
 
-        schema = self.select_lids_platform_mapping(platform)
+        schema = self.ehelper.select_custom_mapping(event)
         for key, value in schema.items():
             if key in event:
                 mapping[value] = event[key]
         return mapping
-
-    def select_lids_platform_mapping(self, platform):
-        """select lids platform mapping"""
-        if platform == 'Linux':
-            return self.configs['linuxLidsMapping']
-        return self.configs['windowsLidsMapping']
-
-    def event_is_lids(self, event):
-        """check if events is lids"""
-        if event['type'] == 'lids_rule_failed':
-            return True
 
     def escape_specials(self, cef_str):
         """escape special characters"""
@@ -107,7 +79,7 @@ class Cef(object):
 
     def build_custom_schema(self, event):
         """build schema based on event type"""
-        if self.event_is_lids(event):
+        if self.ehelper.is_lids(event):
             return self.build_lids_mapping(event)
         return self.build_cef_mapping(event)
 
