@@ -62,7 +62,9 @@ class Cef(object):
         mapping = {}
         self.build_cef_outliers(mapping, event)
         if event['server_platform'] == 'Windows':
-            event.update(self.xml.to_hash(event['original_log_entry']))
+            parsed_log = self.xml.to_hash(event['original_log_entry'])
+            if parsed_log:
+                event.update(parsed_log)
 
         schema = self.ehelper.select_custom_mapping(event)
         for key, value in schema.items():

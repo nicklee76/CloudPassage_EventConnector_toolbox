@@ -26,7 +26,7 @@ class EventHelper(object):
         """use windows channel id if exists"""
         if self.is_lids(event) and event["server_platform"] == 'Windows':
             xml = self.xml.to_hash(event['original_log_entry'])
-            if 'EventID' in xml:
+            if xml and 'EventID' in xml:
                 return xml['EventID']
         return self.configs["eventIdMap"][event["type"]]
 
