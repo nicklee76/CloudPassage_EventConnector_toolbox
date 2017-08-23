@@ -78,6 +78,8 @@ class Event(object):
         try:
             for page in paginations:
                 data = self.get(per_page, date, page)
+                if not data["events"]:
+                    return batched
                 batched.extend(data["events"])
             return batched
         except KeyboardInterrupt:
