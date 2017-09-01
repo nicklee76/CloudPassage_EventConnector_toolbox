@@ -6,6 +6,7 @@ import signal
 from lib.options import Options
 from lib.leef import Leef
 from lib.cef import Cef
+from lib.sumologic import Sumologic
 from lib.rsyslog import Rsyslog
 import lib.validate as validate
 import lib.jsonkv as jsonkv
@@ -21,6 +22,7 @@ class Utility(object):
         self.rsyslog = Rsyslog()
         self.leef = Leef(options)
         self.cef = Cef(options)
+        self.sumo = Sumologic()
 
     def rename(self, original, new):
         """rename"""
@@ -70,6 +72,9 @@ class Utility(object):
             self.rsyslog.process_openlog(self.options["facility"])
             self.rsyslog.process_syslog(jsonkv.format_kv(batched))
             self.rsyslog.closelog()
+        elif self.options["sumologic"]:
+            for event in batched:
+                self.sumo.https_forwarder(event)
         else:
             pass
 

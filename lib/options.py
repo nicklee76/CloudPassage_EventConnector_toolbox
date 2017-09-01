@@ -24,6 +24,7 @@ parser.add_argument('--kv', default=False, action='store_true', help='Write even
 parser.add_argument('--leefsyslog', default=False, action='store_true', help='Write events in LEEF (QRadar) format to syslog server')
 parser.add_argument('--cefsyslog', default=False, action='store_true', help='Write events in CEF (ArcSight) format to syslog server')
 parser.add_argument('--kvsyslog', default=False, action='store_true', help='Write events as key/value pairs to local syslog daemon')
+parser.add_argument('--sumologic', default=False, action='store_true', help='Send events (JSON) format to Sumologic')
 
 
 class Options(object):

@@ -40,7 +40,7 @@ usage: haloEvents.py [-h] [--starting STARTING] --auth AUTH
                      [--configdir CONFIGDIR] [--jsonfile JSONFILE]
                      [--ceffile CEFFILE] [--leeffile LEEFFILE]
                      [--kvfile KVFILE] [--facility FACILITY] [--cef] [--kv]
-                     [--leefsyslog] [--cefsyslog] [--kvsyslog]
+                     [--leefsyslog] [--cefsyslog] [--kvsyslog] [--sumologic]
 
 Event Connector
 
@@ -77,6 +77,7 @@ optional arguments:
   --leefsyslog          Write events in LEEF (QRadar) format to syslog server
   --cefsyslog           Write events in CEF (ArcSight) format to syslog server
   --kvsyslog            Write events as key/value pairs to local syslog daemon
+  --sumologic           Send events (JSON) format to Sumologic
 ```
 ### Halo Event Connector on Linux
 
