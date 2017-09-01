@@ -3,5 +3,6 @@ grid: grid.cloudpassage.com
 repo: packages.cloudpassage.com
 api_hostname : https://api.cloudpassage.com
 port: 443
-windows_syslog_host: 
+windows_syslog_host:
 windows_syslog_port: 514
+sumologic_https_url:
