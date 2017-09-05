@@ -1,6 +1,7 @@
 *.pyc
 lib/*.pyc
 configs/configdir/*
+config/*
 data/*
 .idea/CloudPassage_EventConnector_toolbox.iml
 .idea/misc.xml
