@@ -5,4 +5,4 @@ api_hostname : https://api.cloudpassage.com
 port: 443
 windows_syslog_host:
 windows_syslog_port: 514
-sumologic_https_url: https://endpoint2.collection.us2.sumologic.com/receiver/v1/http/ZaVnC4dhaV0Mt4L8cVWYbni1cIvBiGGule4YYDrX13sVvLHgDVZKpqI-Z71U8fLJk8zCLH-g_9gR2i_NbIpgbaXONRNTpM-xVfyJ7_n6jjM8KtamSad8bw==
+sumologic_https_url:
