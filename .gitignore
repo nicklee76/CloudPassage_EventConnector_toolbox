@@ -1,3 +1,5 @@
+!/configs/monitoredEvents.json
+/configs/myHaloKeys.auth
 *.pyc
 lib/*.pyc
 configs/configdir/*
@@ -8,4 +10,4 @@ data/*
 .idea/modules.xml
 .idea/preferred-vcs.xml
 .idea/workspace.xml
-!/configs/monitoredEvents.json
+
