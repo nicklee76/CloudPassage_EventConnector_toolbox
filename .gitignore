@@ -1,5 +1,6 @@
 !/configs/monitoredEvents.json
 /configs/myHaloKeys.auth
+test/*
 *.pyc
 lib/*.pyc
 configs/configdir/*
