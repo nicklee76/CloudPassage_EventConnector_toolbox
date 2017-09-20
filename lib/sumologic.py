@@ -16,7 +16,7 @@ class Sumologic(object):
         reply_status_code = reply.status_code
         num_attempts = 1
 
-        while (reply.status_code != 200) and (num_attempts < max_retry):
+        while (reply.status_code != 200) and (num_attempts < self.max_retry):
             reply = requests.post(self.configs['sumologic_https_url'], data=data)
             reply_status_code = reply.status_code
 

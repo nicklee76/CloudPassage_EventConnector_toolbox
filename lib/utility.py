@@ -11,6 +11,7 @@ from lib.rsyslog import Rsyslog
 import lib.validate as validate
 import lib.jsonkv as jsonkv
 import lib.settings as settings
+import lib.event_parser as event_parser
 import sys
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -23,6 +24,7 @@ class Utility(object):
         self.leef = Leef(options)
         self.cef = Cef(options)
         self.sumo = Sumologic()
+        self.event_handler = event_parser()
 
     def rename(self, original, new):
         """rename"""
@@ -75,6 +77,9 @@ class Utility(object):
         elif self.options["sumologic"]:
             for event in batched:
                 self.sumo.https_forwarder(event)
+        elif self.options["corr"]:
+            for event in batched:
+                self.event_handler(event)
         else:
             pass
 
