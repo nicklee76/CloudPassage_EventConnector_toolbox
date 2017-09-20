@@ -8,3 +8,4 @@ data/*
 .idea/modules.xml
 .idea/preferred-vcs.xml
 .idea/workspace.xml
+!/configs/monitoredEvents.json
