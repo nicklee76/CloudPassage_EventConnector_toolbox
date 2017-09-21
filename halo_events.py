@@ -1,4 +1,5 @@
-#!/usr/bin/python
+#!/usr/bin/env python
+
 # -*- coding: utf-8 -*-
 """Event Connector"""
 from lib.utility import Utility

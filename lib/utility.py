@@ -8,10 +8,10 @@ from lib.leef import Leef
 from lib.cef import Cef
 from lib.sumologic import Sumologic
 from lib.rsyslog import Rsyslog
+from lib.event_handler import EventHandler
 import lib.validate as validate
 import lib.jsonkv as jsonkv
 import lib.settings as settings
-import lib.event_parser as event_parser
 import sys
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -24,7 +24,7 @@ class Utility(object):
         self.leef = Leef(options)
         self.cef = Cef(options)
         self.sumo = Sumologic()
-        self.event_handler = event_parser()
+        self.event_handler = EventHandler()
 
     def rename(self, original, new):
         """rename"""
@@ -76,10 +76,9 @@ class Utility(object):
             self.rsyslog.closelog()
         elif self.options["sumologic"]:
             for event in batched:
-                self.sumo.https_forwarder(event)
-        elif self.options["corr"]:
-            for event in batched:
-                self.event_handler(event)
+                #self.sumo.https_forwarder(event)
+                # parse the event and call the 3rd party solution such as Puppet
+                self.event_handler.event_parser(event)
         else:
             pass
 
